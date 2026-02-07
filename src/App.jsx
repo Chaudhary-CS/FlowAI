@@ -1,25 +1,28 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Plus, Trash2, Edit2, Archive, Check } from "lucide-react"
 import { cn } from "./lib/utils"
+import { useBuckets } from "./hooks/useBuckets"
 
 function App() {
-    const [buckets, setBuckets] = useState([
-        { id: 1, title: "Japan Trip", content: "Vegetarian, hates crowds, budget $3k" },
-        { id: 2, title: "FlowAI Dev", content: "React, Vite, Chrome Extension V3" }
-    ])
+    const { buckets, loading, addBucket, deleteBucket } = useBuckets()
     const [isAdding, setIsAdding] = useState(false)
     const [newBucket, setNewBucket] = useState({ title: "", content: "" })
 
-    const handleAddBucket = () => {
+    const handleCreate = () => {
         if (!newBucket.title || !newBucket.content) return
-        setBuckets([...buckets, { id: Date.now(), ...newBucket }])
+        addBucket(newBucket)
         setNewBucket({ title: "", content: "" })
         setIsAdding(false)
     }
 
-    const handleDelete = (id) => {
-        setBuckets(buckets.filter(b => b.id !== id))
-    }
+    if (loading) return (
+        <div className="w-[350px] h-[500px] bg-slate-950 flex items-center justify-center text-slate-500 font-sans">
+            <div className="flex flex-col items-center gap-2">
+                <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                <span className="text-xs">Loading Context...</span>
+            </div>
+        </div>
+    )
 
     return (
         <div className="w-[350px] h-[500px] bg-slate-950 text-slate-50 flex flex-col font-sans">
@@ -57,13 +60,20 @@ function App() {
                             onChange={(e) => setNewBucket({ ...newBucket, content: e.target.value })}
                         />
                         <button
-                            onClick={handleAddBucket}
+                            onClick={handleCreate}
                             disabled={!newBucket.title || !newBucket.content}
                             className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium py-2 rounded-lg transition-colors flex items-center justify-center gap-2"
                         >
                             <Check className="w-4 h-4" />
                             Create Bucket
                         </button>
+                    </div>
+                )}
+
+                {buckets.length === 0 && !isAdding && (
+                    <div className="text-center text-slate-600 mt-10">
+                        <p className="text-sm">No buckets found.</p>
+                        <p className="text-xs">Click + to add your first context.</p>
                     </div>
                 )}
 
@@ -81,7 +91,7 @@ function App() {
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation()
-                                        handleDelete(bucket.id)
+                                        deleteBucket(bucket.id)
                                     }}
                                     className="p-1 hover:bg-slate-800 rounded text-slate-400 hover:text-red-400 transition-colors"
                                 >
