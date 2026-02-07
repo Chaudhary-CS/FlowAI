@@ -3,14 +3,23 @@
   "name": "FlowAI - Context Bridge",
   "version": "1.0.0",
   "description": "Your infinite memory layer for every AI.",
-  "permissions": ["storage", "activeTab"],
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
   "action": {
     "default_popup": "index.html"
   },
   "content_scripts": [
     {
-      "matches": ["https://chatgpt.com/*", "https://claude.ai/*", "https://www.perplexity.ai/*"],
-      "js": ["src/content/index.js"]
+      "matches": [
+        "https://chatgpt.com/*",
+        "https://claude.ai/*",
+        "https://www.perplexity.ai/*"
+      ],
+      "js": [
+        "assets/content.js"
+      ]
     }
   ]
 }
