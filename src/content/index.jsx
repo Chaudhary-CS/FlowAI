@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { Archive, X, Check, Sparkles, Zap } from 'lucide-react'
+import { Archive, X, Check, Sparkles, Infinity } from 'lucide-react'
 import { clsx } from "clsx"
 
 // --- Injection Logic (Kept same, just UI update) ---

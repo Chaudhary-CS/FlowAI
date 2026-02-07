@@ -46,7 +46,7 @@ Since this is a private extension, you install it via Chrome Developer Mode.
 
 ### 2. Inject Context (The "Bridge")
 -   Open **ChatGPT** (or Claude/Perplexity).
--   Look for the **Blue Orb ⚡** in the bottom right corner.
+-   Look for the **Flow Infinity ♾️** orb in the bottom right corner.
 -   Click it to open the Memory Bridge.
 -   Click **Japan Trip**.
 -   *Boom!* The context is injected into your chat input.
