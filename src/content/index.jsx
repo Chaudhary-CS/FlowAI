@@ -79,7 +79,7 @@ function FlowOverlay() {
                 <div className="p-5 border-b border-white/5 bg-white/5 flex justify-between items-center">
                     <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-900/50">
-                            <Zap className="w-4 h-4 text-white fill-white/20" />
+                            <Infinity className="w-4 h-4 text-white fill-white/20" />
                         </div>
                         <div>
                             <span className="text-white font-bold text-sm tracking-tight block">Memory Bridge</span>
