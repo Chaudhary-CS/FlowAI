@@ -1,70 +1,71 @@
 # FlowAI 🌊
 
-**The Infinite Memory Layer for Every AI.**
+A Chrome extension that acts as a persistent context layer across AI tools. Instead of
+re-explaining your project stack, preferences, or constraints every time you open a new
+chat, FlowAI stores them locally and injects the right context into ChatGPT, Claude, or
+Perplexity with a single click.
 
-FlowAI is a "Context Bridge" that follows you across **ChatGPT**, **Claude**, and **Perplexity**. It stores your project details, personal preferences, and life contexts ("Buckets") in your browser and injects them into AI chats with a single click.
+## 🏗️ Architecture
 
----
+The extension runs across three layers:
+
+```
+popup/          React UI         Bucket manager, add/edit/delete contexts
+content.js      Content Script   Detects active AI chat page, injects context on trigger
+background.js   Service Worker   Manages Chrome Storage reads/writes, cross-tab state
+```
+
+Content scripts listen for the FlowAI trigger on supported pages and inject the selected
+bucket directly into the chat input field via DOM manipulation. All reads and writes go
+through `chrome.storage.local`, keeping latency near-zero and eliminating any server
+dependency. The storage layer falls back to `localStorage` in the dev environment so the
+UI can run without a browser extension context.
 
 ## 🚀 Features
 
--   **Universal Memory:** Works on ChatGPT, Claude.ai, and Perplexity.ai.
--   **Privacy First:** All data lives in your browser (`chrome.storage.local`). Zero server dependency.
--   **Premium UI:** Glassmorphic design that feels like a native part of your OS.
--   **Free-Form Buckets:** Save *anything* (Code stacks, Travel plans, Grandma's recipes).
+- **Universal context injection** - works across ChatGPT, Claude.ai, and Perplexity.ai
+- **Free-form buckets** - store any structured context: project stacks, constraints, preferences
+- **Privacy first** - all data lives in the browser, nothing ever leaves the device
+- **Persistent across sessions** - Chrome Storage API keeps buckets intact between restarts
+- **Floating orb overlay** - one-click inject from any AI chat page without switching tabs
 
----
+## 🛠️ Tech Stack
 
-## 🛠️ Setup Guide (Developer Mode)
+- **Frontend:** React, Vite
+- **Styling:** Tailwind CSS
+- **Storage:** Chrome Storage API with localStorage fallback
+- **Bridge:** Manifest V3 content scripts, DOM injection
+- **Icons:** Lucide React
 
-Since this is a private extension, you install it via Chrome Developer Mode.
+## 📦 Setup
 
-1.  **Build the Project:**
-    Open this folder in your terminal and run:
-    ```bash
-    npm install
-    npm run build
-    ```
-    *(This creates a `dist` folder).*
+```bash
+npm install
+npm run build
+```
 
-2.  **Install in Chrome:**
-    -   Go to `chrome://extensions/`
-    -   Toggle **Developer mode** (top right).
-    -   Click **Load unpacked**.
-    -   Select the `dist` folder inside this project.
+Then in Chrome:
+1. Go to `chrome://extensions/`
+2. Enable Developer mode
+3. Click Load unpacked and select the `dist/` folder
 
----
+## 🧪 Testing
 
-## 🧪 How to Test
+1. Open the extension and create a bucket with any context (project name, tech stack, constraints)
+2. Navigate to ChatGPT, Claude, or Perplexity
+3. Click the FlowAI orb in the bottom right corner
+4. Select a bucket and the context injects directly into the chat input
 
-### 1. Create a Bucket (The "Backpack")
--   Click the **FlowAI icon** in your Chrome toolbar.
--   Click **+** to add a bucket.
--   **Title:** `Japan Trip`
--   **Context:** `Budget $3000. Wife is vegetarian. I hate crowds.`
--   Click **Start Flow**.
+## 🔧 What I'd Change
 
-### 2. Inject Context (The "Bridge")
--   Open **ChatGPT** (or Claude/Perplexity).
--   Look for the **Flow Infinity ♾️** orb in the bottom right corner.
--   Click it to open the Memory Bridge.
--   Click **Japan Trip**.
--   *Boom!* The context is injected into your chat input.
+The content script currently polls for the chat input field on page load, which is fragile
+when AI platforms update their DOM structure. A more reliable approach would be using a
+MutationObserver to watch for the input field appearing rather than assuming it is present
+on load. I would also add a structured sync layer using `chrome.storage.sync` so buckets
+persist across devices, with conflict resolution for simultaneous edits.
 
-### 3. Ask the AI
--   Now type: *"Plan a dinner for tonight."*
--   See how the AI magically knows about the vegetarian requirement and budget!
+## 👨‍💻 Developer
 
----
-
-## 🏗️ Tech Stack
-
--   **Frontend:** React + Vite
--   **Styling:** Tailwind CSS (Glassmorphism)
--   **Icons:** Lucide React
--   **Storage:** Chrome Storage API (Persistence)
--   **Bridge:** DOM Manipulation (Content Scripts)
-
----
-
-> "Stop repeating yourself. Let the flow take over."
+**Kartik Chaudhary**
+- Email: chaudhary417@usf.edu
+- GitHub: [@Chaudhary-CS](https://github.com/Chaudhary-CS)
